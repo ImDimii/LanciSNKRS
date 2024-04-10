@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    .product-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .size-dropdown-label {
+      top: 50%;
+      transform: translateY(-50%);
+      right: 0.75rem;
+    }
+  </style>
+  <title>Prossimi Lanci</title>
+</head>
+<body class="bg-gray-100 p-8">
+
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold mb-4">Prossimi Lanci</h1>
+
+    <!-- Displaying Products with Size Dropdowns -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="productsContainer">
+      <!-- Products will be dynamically added here using JavaScript -->
+    </div>
+  </div>
+
+  <footer class="mt-8 text-center text-gray-500">
+    Creato da <a href="https://www.instagram.com/dimitri.cotilli" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:underline">Dimitri</a> &copy; 2024
+  </footer>
+
+  <script>
+    function renderProducts(products) {
+      const productsContainer = document.getElementById('productsContainer');
+
+      productsContainer.innerHTML = '';
+
+      products.forEach(product => {
+        const productCard = document.createElement('div');
+        productCard.className = 'bg-white p-4 rounded-md shadow-md';
+
+        const image = document.createElement('img');
+        image.src = product.image;
+        image.alt = product.name;
+        image.className = 'product-image mb-4';
+
+        const name = document.createElement('p');
+        name.textContent = product.name;
+        name.className = 'text-lg font-bold mb-2';
+
+        const price = document.createElement('p');
+        price.textContent = `Prezzo: ${product.price || 'N/D'}`;
+        price.className = 'text-gray-700 mb-2';
+
+        const sizeDropdownContainer = document.createElement('div');
+        sizeDropdownContainer.className = 'relative mb-2';
+
+        const sizeDropdownLabel = document.createElement('span');
+        sizeDropdownLabel.textContent = 'Stock Size : ';
+
+        const sizeDropdown = document.createElement('select');
+        sizeDropdown.id = `sizeDropdown_${product.name.replace(/\s+/g, '_')}`;
+        sizeDropdown.className = 'block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300';
+        sizeDropdown.addEventListener('change', () => filterBySize(product.sizes, sizeDropdown.value));
+
+        product.sizes.forEach(size => {
+          const option = document.createElement('option');
+          option.value = size.size;
+          option.textContent = `${size.size} : ${size.available}`;
+          option.disabled = true;
+          sizeDropdown.appendChild(option);
+        });
+
+        sizeDropdownContainer.appendChild(sizeDropdownLabel);
+        sizeDropdownContainer.appendChild(sizeDropdown);
+
+        const exclusiveAccess = document.createElement('p');
+        exclusiveAccess.textContent = `Accesso Esclusivo: ${product.exclusive_access ? 'Sì' : 'No'}`;
+        exclusiveAccess.className = 'text-gray-700 mb-2';
+
+        const launchDate = document.createElement('p');
+        launchDate.textContent = `Data di Lancio: ${formatDate(product.data)}`;
+        launchDate.className = 'text-gray-700 mb-2';
+
+        // Aggiungi il campo launchMethod
+        const launchMethod = document.createElement('p');
+        launchMethod.textContent = `Metodo di Lancio: ${product.launchMethod || 'N/D'}`;
+        launchMethod.className = 'text-gray-700 mb-2';
+
+        productCard.appendChild(image);
+        productCard.appendChild(name);
+        productCard.appendChild(price);
+        productCard.appendChild(sizeDropdownContainer);
+        productCard.appendChild(exclusiveAccess);
+        productCard.appendChild(launchDate);
+        productCard.appendChild(launchMethod);
+
+        productsContainer.appendChild(productCard);
+      });
+    }
+
+    function filterBySize(sizes, selectedSize) {
+      const filteredProducts = sizes.filter(size => size.size === selectedSize);
+      renderProducts(filteredProducts);
+    }
+
+    async function fetchData() {
+      try {
+        const response = await fetch('/scarpe');
+        const data = await response.json();
+
+        if (data.products.length > 0) {
+          renderProducts(data.products);
+        } else {
+          console.log('Nessun prodotto disponibile');
+        }
+      } catch (error) {
+        console.error('Errore durante il recupero dei dati:', error);
+      }
+    }
+
+    fetchData();
+
+    function formatDate(dateString) {
+      const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', timeZone: 'UTC' };
+      const formattedDate = new Date(dateString).toLocaleString('en-US', options);
+      return formattedDate !== 'Invalid Date' ? formattedDate : dateString;
+    }
+  </script>
+</body>
+</html>
