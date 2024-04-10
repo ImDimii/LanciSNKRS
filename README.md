@@ -16,4 +16,4 @@ Sito web scritto in node.js che restituisce i prossimi lanci di SNKRS ITALIA (ni
   ! Il main.py e' la stessa cosa del main.js soltanto scritto in python per lo studio del'API di SNKRS
 
 
-PER PROBLEMI O PER INFORMAZIONI CONTATTATEMI SU INSTAGRAM ![link](https://www.instagram.com/dimitri.cotilli/)
+PER PROBLEMI O PER INFORMAZIONI CONTATTATEMI SU INSTAGRAM https://www.instagram.com/dimitri.cotilli/
