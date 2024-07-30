@@ -7,9 +7,9 @@ Sito web scritto in node.js che restituisce i prossimi lanci di SNKRS ITALIA (ni
 
 1) Inizializza NODE
 
-2) Installa le librerie express,axios usando NPM
+2) Installa le librerie express,axios usando NPM install
    
-3) Avvia il server con node (main.js)
+3) Avvia il server con: node main.js
 
 4) Apri il browser e vai su https://localhost:3000 (!APRI LA PORTA DAL ROUTER SE VUOI ACCEDERE DA L'ESTERNO CON IP PUBLICO)
 
